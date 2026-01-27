@@ -1,4 +1,6 @@
 -- ============================================
+-- Project Name: analyzing-students-mental-health
+--
 -- 1. Task Description
 -- Explore and analyze the students data to see how the
 -- length of stay (stay) impacts the average mental health
