@@ -1,34 +1,38 @@
 -- ============================================
 -- 1. Task Description
--- Combine multiple SQL concepts—WHERE, GROUP BY,
--- HAVING, ORDER BY, LIMIT, and aggregate functions—
--- to produce a concise, insight-rich summary.
--- The goal of this exercise is to return, for each
--- year after 1990, the average budget and average
--- gross of films where the average budget exceeds
--- 60 million, then sort by average gross (descending)
--- and keep only the top year.
+-- Explore and analyze the students data to see how the
+-- length of stay (stay) impacts the average mental health
+-- diagnostic scores of the international students present
+-- in the study. Return a table with nine rows and five
+-- columns (stay, count_int, average_phq, average_scs, average_as),
+-- where averages are rounded to two decimals, counts reflect the
+-- number of international students per stay group, and results
+-- are sorted by stay in descending order.
+--
+-- Study context:
+-- A Japanese international university surveyed students (2018),
+-- finding that international students face higher mental health
+-- risks than the general population, and that social connectedness
+-- (SCS) and acculturative stress (ASISS) predict depression (PHQ-9).
 --
 -- 2. Topics Covered
 -- - WHERE (row filtering)
 -- - GROUP BY (group-level aggregation)
--- - AVG() (aggregate function)
--- - HAVING (filtering aggregated groups)
--- - ORDER BY ... DESC (sorting by aggregated metric)
--- - LIMIT (restricting result set size)
--- - Alias usage in ORDER BY (ordering by selected aliases)
+-- - COUNT() and AVG() (aggregate functions)
+-- - ROUND() (formatting numeric output)
+-- - ORDER BY (sorting results)
+-- - Aliasing result columns
 -- ============================================
 
--- For each release year after 1990, compute average budget and gross,
--- keep only years with avg budget > 60M, then return the top year by avg gross.
+-- Select stay and aggregated metrics for international students only.
+-- Returns: 9 rows (expected), 5 columns with required aliases.
 SELECT
-  release_year,
-  AVG(budget) AS avg_budget,
-  AVG(gross)  AS avg_gross
-FROM films
-WHERE release_year > 1990
-GROUP BY release_year
-HAVING AVG(budget) > 60000000
--- Order the results from highest to lowest average gross and limit to one
-ORDER BY avg_gross DESC
-LIMIT 1;
+    stay,
+    COUNT(*) AS count_int,                 -- number of international students in each stay group
+    ROUND(AVG(todep), 2) AS average_phq,   -- PHQ-9 average
+    ROUND(AVG(tosc), 2) AS average_scs,    -- SCS average (social connectedness)
+    ROUND(AVG(toas), 2) AS average_as      -- ASISS average (acculturative stress)
+FROM students
+WHERE inter_dom IN ('Inter')               -- filter to international students
+GROUP BY stay
+ORDER BY stay DESC;                        -- sort by length of stay (descending)
