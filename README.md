@@ -1,4 +1,4 @@
-# SQL Studies through DataCamp Practice
+# SQL Studies through DataCamp Practice 📊
 
 This repository is my personal learning log for studying **SQL for data analysis** through hands-on practice. It contains the queries I developed while completing the **Associate Data Analyst in SQL** career track on DataCamp.
 
