@@ -4,12 +4,12 @@ This repository is my personal learning log for studying **SQL for data analysis
 
 The goal of this repository is to consolidate core SQL concepts, analytical thinking, and data-driven decision making by keeping a structured and reusable collection of queries built throughout the learning journey.
 
-📌 About this repository  
+## 📌 About this repository  
 This repository follows a progressive learning path, starting from SQL fundamentals and evolving toward advanced analytical techniques. The queries were written as part of guided exercises, case studies, and analytical scenarios proposed in the DataCamp track.
 
 Rather than focusing on isolated syntax examples, the emphasis is on **using SQL to explore data, generate insights, and support decisions**, mirroring real-world analytical workflows.
 
-📚 Contents  
+## 📚 Contents  
 The repository is organized by topic or course, reflecting the structure of the learning track. It includes queries related to:
 
 1. Relational databases and basic querying;
@@ -25,10 +25,10 @@ The repository is organized by topic or course, reflecting the structure of the 
 
 Each file represents a specific topic or course and can be read independently as a reference.
 
-▶️ How to use  
+## ▶️ How to use  
 The SQL files can be viewed directly on GitHub or executed locally using any SQL-compatible environment (such as PostgreSQL). Some queries are written with PostgreSQL syntax and functions in mind.
 
-📝 Notes  
+## 📝 Notes  
 This is a **study-focused repository**. The main objective is clarity, incremental learning, and documentation of the reasoning behind each query. The repository is intended to serve as a long-term reference when working on data analysis, BI, or analytics projects.
 
 🧑‍💻 Author  
