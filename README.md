@@ -31,7 +31,7 @@ The SQL files can be viewed directly on GitHub or executed locally using any SQL
 ## 📝 Notes  
 This is a **study-focused repository**. The main objective is clarity, incremental learning, and documentation of the reasoning behind each query. The repository is intended to serve as a long-term reference when working on data analysis, BI, or analytics projects.
 
-🧑‍💻 Author  
+## 🧑‍💻 Author  
 Bruno Zomignani Perciani  
 Undergraduate Student at the Federal University of ABC (UFABC)  
 📧 bruno.perciani@aluno.ufabc.edu.br
