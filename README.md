@@ -12,16 +12,17 @@ Rather than focusing on isolated syntax examples, the emphasis is on **using SQL
 ## 📚 Contents  
 The repository is organized by topic or course, reflecting the structure of the learning track. It includes queries related to:
 
-1. Relational databases and basic querying;
-2. Filtering, aggregating, and grouping data;
-3. Joining multiple tables and working with subqueries;
-4. Data manipulation using CASE statements and CTEs;
-5. Window functions and advanced analytical queries;
-6. Exploratory data analysis in SQL;
-7. PostgreSQL-specific functions and features;
-8. Statistical concepts applied to data analysis;
-9. Data visualization principles and data communication;
-10. Data-driven decision making using SQL and OLAP-style queries.
+01. Introduction to SQL;
+02. Intermediate SQL;
+03. Joining Data in SQL;
+04. Data Manipulation in SQL;
+05. PostgreSQL Summary Stats and Window Functions;
+06. Functions for Manipulating Data in PostgreSQL;
+07. Introduction to Statistics;
+08. Exploratory Data Analysis in SQL;
+09. Data-Driven Decision Making in SQL;
+10. Understanding Data Visualization;
+11. Data Comunication Concepts.
 
 Each file represents a specific topic or course and can be read independently as a reference.
 
