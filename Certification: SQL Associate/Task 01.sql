@@ -1,0 +1,77 @@
+-- Before you can start any analysis, you need to confirm that the data is accurate and reflects what you expect to see. 
+-- It is known that there are some issues with the `branch` table, and the data team have provided the following data description. 
+-- Write a query to return data matching this description, including identifying and cleaning all invalid values. 
+-- You must match all column names and description criteria. Your output should be a DataFrame named 'clean_branch_data'.
+
+-- | Column Name | Criteria                                                |
+-- |-------------|---------------------------------------------------------|
+-- |id | Nominal. The unique identifier of the hotel. </br>Missing values are not possible due to the database structure.|
+-- | location | Nominal. The location of the particular hotel. One of four possible values, 'EMEA', 'NA', 'LATAM' and 'APAC'. </br>Missing values should be replaced with “Unknown”. |
+-- | total_rooms | Discrete. The total number of rooms in the hotel. Must be a positive integer between 1 and 400. </br>Missing values should be replaced with the default number of rooms, 100. |
+-- | staff_count | Discrete. The number of staff employeed in the hotel service department. </br>Missing values should be replaced with the total_rooms multiplied by 1.5. |
+-- | opening_date | Discrete. The year in which the hotel opened. This can be any value between 2000 and 2023. </br>Missing values should be replaced with 2023. |
+-- | target_guests | Nominal. The primary type of guest that is expected to use the hotel. Can be one of 'Leisure' or 'Business'. </br>Missing values should be replaced with 'Leisure'. |
+
+WITH cleaned AS (
+  SELECT
+    b.id,
+    
+    CASE
+      WHEN b.location IS NULL OR btrim(b.location) = '' 
+        THEN 'Unknown'
+      WHEN upper(btrim(b.location)) IN ('EMEA', 'NA', 'LATAM', 'APAC') 
+        THEN upper(btrim(b.location))
+      ELSE 'Unknown'
+    END AS location,
+    
+    CASE
+      WHEN b.total_rooms IS NULL 
+        THEN 100
+      WHEN b.total_rooms::text ~ '^\s*\d+\s*$'
+           AND b.total_rooms::int BETWEEN 1 AND 400
+        THEN b.total_rooms::int
+      ELSE 100
+    END AS total_rooms,
+    
+    b.staff_count AS staff_count_raw,
+    
+    CASE
+      WHEN b.opening_date IS NULL 
+        THEN 2023
+      WHEN b.opening_date::text ~ '^\s*\d+\s*$'
+           AND b.opening_date::int BETWEEN 2000 AND 2023
+        THEN b.opening_date::int
+      ELSE 2023
+    END AS opening_date,
+    
+    CASE
+      WHEN b.target_guests IS NULL OR btrim(b.target_guests) = '' 
+        THEN 'Leisure'
+      WHEN lower(btrim(b.target_guests)) = 'leisure' 
+        THEN 'Leisure'
+      WHEN lower(btrim(b.target_guests)) = 'business' 
+        THEN 'Business'
+      ELSE 'Leisure'
+    END AS target_guests
+    
+  FROM branch b
+)
+
+SELECT
+  id,
+  location,
+  total_rooms,
+  
+  CASE
+    WHEN staff_count_raw IS NULL 
+      THEN round(total_rooms * 1.5)::int
+    WHEN staff_count_raw::text ~ '^\s*\d+\s*$' 
+         AND staff_count_raw::int > 0 
+      THEN staff_count_raw::int
+    ELSE round(total_rooms * 1.5)::int
+  END AS staff_count,
+  
+  opening_date,
+  target_guests
+  
+FROM cleaned;
