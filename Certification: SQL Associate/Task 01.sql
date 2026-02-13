@@ -5,12 +5,12 @@
 
 -- | Column Name | Criteria                                                |
 -- |-------------|---------------------------------------------------------|
--- |id | Nominal. The unique identifier of the hotel. </br>Missing values are not possible due to the database structure.|
--- | location | Nominal. The location of the particular hotel. One of four possible values, 'EMEA', 'NA', 'LATAM' and 'APAC'. </br>Missing values should be replaced with “Unknown”. |
--- | total_rooms | Discrete. The total number of rooms in the hotel. Must be a positive integer between 1 and 400. </br>Missing values should be replaced with the default number of rooms, 100. |
--- | staff_count | Discrete. The number of staff employeed in the hotel service department. </br>Missing values should be replaced with the total_rooms multiplied by 1.5. |
--- | opening_date | Discrete. The year in which the hotel opened. This can be any value between 2000 and 2023. </br>Missing values should be replaced with 2023. |
--- | target_guests | Nominal. The primary type of guest that is expected to use the hotel. Can be one of 'Leisure' or 'Business'. </br>Missing values should be replaced with 'Leisure'. |
+-- |id | Nominal. The unique identifier of the hotel. Missing values are not possible due to the database structure.|
+-- | location | Nominal. The location of the particular hotel. One of four possible values, 'EMEA', 'NA', 'LATAM' and 'APAC'. Missing values should be replaced with “Unknown”. |
+-- | total_rooms | Discrete. The total number of rooms in the hotel. Must be a positive integer between 1 and 400. Missing values should be replaced with the default number of rooms, 100. |
+-- | staff_count | Discrete. The number of staff employeed in the hotel service department. Missing values should be replaced with the total_rooms multiplied by 1.5. |
+-- | opening_date | Discrete. The year in which the hotel opened. This can be any value between 2000 and 2023. Missing values should be replaced with 2023. |
+-- | target_guests | Nominal. The primary type of guest that is expected to use the hotel. Can be one of 'Leisure' or 'Business'. Missing values should be replaced with 'Leisure'. |
 
 WITH normalized AS (
   SELECT
@@ -111,3 +111,23 @@ SELECT
   target_guests
   
 FROM cleaned;
+
+-------------------------------------------------------------------------------
+
+SELECT 
+    id,
+    COALESCE(location, 'Unknown') AS location,
+    COALESCE(total_rooms, 100) AS total_rooms,
+    COALESCE(staff_count, 1.5 * total_rooms) AS staff_count,
+  
+    CASE 
+        WHEN opening_date = '-' THEN '2023'
+        ELSE COALESCE(opening_date, '2023')
+    END AS opening_date,
+  
+    CASE 
+        WHEN target_guests ILIKE 'B%' THEN 'Business'
+        ELSE 'Leisure'
+    END AS target_guests
+  
+FROM branch;
