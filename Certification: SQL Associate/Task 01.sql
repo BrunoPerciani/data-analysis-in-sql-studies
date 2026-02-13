@@ -12,49 +12,85 @@
 -- | opening_date | Discrete. The year in which the hotel opened. This can be any value between 2000 and 2023. </br>Missing values should be replaced with 2023. |
 -- | target_guests | Nominal. The primary type of guest that is expected to use the hotel. Can be one of 'Leisure' or 'Business'. </br>Missing values should be replaced with 'Leisure'. |
 
-WITH cleaned AS (
+WITH normalized AS (
   SELECT
     b.id,
+    regexp_replace(
+      upper(coalesce(b.location, '')), 
+      '[^[:alpha:]]', 
+      '', 
+      'g'
+    ) AS location_norm,
+    b.total_rooms,
+    b.staff_count AS staff_count_raw,
+    b.opening_date,
+    regexp_replace(
+      lower(coalesce(b.target_guests, '')), 
+      '[^[:alpha:]]', 
+      '', 
+      'g'
+    ) AS guests_norm
+  FROM branch b
+),
+
+cleaned AS (
+  SELECT
+    id,
     
     CASE
-      WHEN b.location IS NULL OR btrim(b.location) = '' 
+      WHEN location_norm = '' 
         THEN 'Unknown'
-      WHEN upper(btrim(b.location)) IN ('EMEA', 'NA', 'LATAM', 'APAC') 
-        THEN upper(btrim(b.location))
+      WHEN location_norm IN ('EMEA', 'NA', 'LATAM', 'APAC') 
+        THEN location_norm
+      WHEN location_norm LIKE '%EUROPE%' 
+           OR location_norm LIKE '%AFRICA%' 
+           OR location_norm LIKE '%MIDDLEEAST%' 
+        THEN 'EMEA'
+      WHEN location_norm LIKE '%NORTHAMERICA%' 
+           OR location_norm LIKE '%UNITEDSTATES%' 
+           OR location_norm LIKE '%CANADA%' 
+        THEN 'NA'
+      WHEN location_norm LIKE '%LATINAMERICA%' 
+           OR location_norm LIKE '%SOUTHAMERICA%' 
+           OR location_norm LIKE '%BRAZIL%' 
+        THEN 'LATAM'
+      WHEN location_norm LIKE '%ASIA%' 
+           OR location_norm LIKE '%PACIFIC%' 
+        THEN 'APAC'
       ELSE 'Unknown'
     END AS location,
     
     CASE
-      WHEN b.total_rooms IS NULL 
+      WHEN total_rooms IS NULL 
         THEN 100
-      WHEN b.total_rooms::text ~ '^\s*\d+\s*$'
-           AND b.total_rooms::int BETWEEN 1 AND 400
-        THEN b.total_rooms::int
+      WHEN total_rooms::text ~ '^\s*\d+\s*$'
+           AND total_rooms::int BETWEEN 1 AND 400
+        THEN total_rooms::int
       ELSE 100
     END AS total_rooms,
     
-    b.staff_count AS staff_count_raw,
+    staff_count_raw,
     
     CASE
-      WHEN b.opening_date IS NULL 
+      WHEN opening_date IS NULL 
         THEN 2023
-      WHEN b.opening_date::text ~ '^\s*\d+\s*$'
-           AND b.opening_date::int BETWEEN 2000 AND 2023
-        THEN b.opening_date::int
+      WHEN opening_date::text ~ '^\s*\d+\s*$'
+           AND opening_date::int BETWEEN 2000 AND 2023
+        THEN opening_date::int
       ELSE 2023
     END AS opening_date,
     
     CASE
-      WHEN b.target_guests IS NULL OR btrim(b.target_guests) = '' 
+      WHEN guests_norm = '' 
         THEN 'Leisure'
-      WHEN lower(btrim(b.target_guests)) = 'leisure' 
+      WHEN guests_norm IN ('leisure', 'leasure')
         THEN 'Leisure'
-      WHEN lower(btrim(b.target_guests)) = 'business' 
+      WHEN guests_norm = 'business' 
         THEN 'Business'
       ELSE 'Leisure'
     END AS target_guests
     
-  FROM branch b
+  FROM normalized
 )
 
 SELECT
