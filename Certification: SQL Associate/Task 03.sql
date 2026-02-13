@@ -3,19 +3,19 @@
 -- Your output should be a DataFrame named 'target_hotels'.
 -- Use the original branch table, not the output of task 1.
 
-SELECT 
+SELECT
   s.description,
   r.branch_id,
   b.location,
-  s.id AS request_id,
+  r.id AS request_id,
   r.rating
 	
-FROM service AS s
+FROM request AS r
 	
-  LEFT JOIN request AS r
-    ON s.id = r.id
   LEFT JOIN branch AS b
-    ON s.id = b.id
+    ON b.id = r.branch_id
+  LEFT JOIN service AS s
+    ON s.id = r.service_id
 	
 WHERE upper(btrim(b.location)) IN ('EMEA', 'LATAM')
   AND lower(btrim(s.description)) IN ('meal', 'laundry');
