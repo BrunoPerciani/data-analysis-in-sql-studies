@@ -5,7 +5,7 @@
 
 -- | Column Name | Criteria                                                |
 -- |-------------|---------------------------------------------------------|
--- |id | Nominal. The unique identifier of the hotel. Missing values are not possible due to the database structure.|
+-- | id | Nominal. The unique identifier of the hotel. Missing values are not possible due to the database structure.|
 -- | location | Nominal. The location of the particular hotel. One of four possible values, 'EMEA', 'NA', 'LATAM' and 'APAC'. Missing values should be replaced with “Unknown”. |
 -- | total_rooms | Discrete. The total number of rooms in the hotel. Must be a positive integer between 1 and 400. Missing values should be replaced with the default number of rooms, 100. |
 -- | staff_count | Discrete. The number of staff employeed in the hotel service department. Missing values should be replaced with the total_rooms multiplied by 1.5. |
